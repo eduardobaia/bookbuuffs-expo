@@ -6,10 +6,18 @@ import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import SocialSignInButtons from '../../components/SocialSignInButtons/SocialSignInButtons';
 
+import { useForm, Controller } from "react-hook-form";
+
+
 import { useNavigation } from '@react-navigation/native';
 
 
 const ConfirmEmailScreen = () => {
+
+  const {control, handleSubmit, 
+    formState:{errors} } = useForm();
+
+
   const [code, setCode] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,7 +26,8 @@ const ConfirmEmailScreen = () => {
 
   const {height} = useWindowDimensions();
 
-  const onConfirmPress = () => {
+  const onConfirmPress = (data) => {
+    console.log(data);
     navigation.navigate('Home')
   }
   const onResendPress = () => {
@@ -51,17 +60,20 @@ const ConfirmEmailScreen = () => {
      <Text>We've sent an email with the confirmation code, please check your email to  <Text style={styles.link} onPress={ onTermsOfUsePressed}>activate your account </Text> 
  clickin in the {''} <Text style={styles.link}  onPress={ onPrivacyPolicyPressed}> confirmation link </Text> or paste the code in here.   
   </Text>
+ 
 
     <CustomInput
+    name="code"
     placeholder="Code"
-    value={code}
-    setValue={setCode}
+    control={control}
+    rules={{required:'Code is required.', minLength: {value:8, message: 'Code should habve min 8 characters ' }}}
     />
+
 
  
     <CustomButton
     text='Confirm'
-    onPress={onConfirmPress}
+    onPress={handleSubmit( onConfirmPress)}
     type='FOUR'
     />
  

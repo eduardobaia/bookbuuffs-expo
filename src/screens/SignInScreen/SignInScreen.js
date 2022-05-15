@@ -66,7 +66,7 @@ const SignInScreen = () => {
     name="username"
     placeholder="Username"
     control={control}
-    rules={{required:'Username is required*',minLength: {value:8, message: 'Username shoud be minimun 8 characteres.' }}}
+    rules={{required:'Username is required*',minLength: {value:8, message: 'Username should be minimun 8 characteres.' }}}
     />
 
     <CustomInput
@@ -74,7 +74,7 @@ const SignInScreen = () => {
     name="password"
     control={control}
     secureTextEntry
-    rules={{required:'Password is required*',minLength: {value:8, message: 'Password shoud be minimun 8 characteres.' } }}
+    rules={{required:'Password is required*',minLength: {value:8, message: 'Password should be minimun 8 characteres.' } }}
     />
 
     <CustomButton

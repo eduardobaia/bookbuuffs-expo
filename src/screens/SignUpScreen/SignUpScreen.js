@@ -9,15 +9,19 @@ import SocialSignInButtons from '../../components/SocialSignInButtons/SocialSign
 import { useNavigation } from '@react-navigation/native';
 import { useForm, Controller} from "react-hook-form";
 
-
+const EMAIL_REGEX =/^[a-zA-Z0-9.! #$%&'*+/=? ^_`{|}~-]+@[a-zA-Z0-9-]+(?:\. [a-zA-Z0-9-]+)*$/;
 
 const SignUpScreen = () => {
+console.log('pwd eeee'+ pwd);
 
-  
-  const navigation = useNavigation();
+
+    const navigation = useNavigation();
   const {control, handleSubmit, 
-    formState:{errors} } = useForm();
+    formState:{errors}, watch } = useForm({defaultValues:{
+      username:'', password:'', password_repeat:''
+    }});
 
+  const pwd = watch('password');
   
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -61,15 +65,15 @@ const SignUpScreen = () => {
     name="username"
     placeholder="Username"
     control={control}
-    rules={{required:true, }}
-    />
+    rules={{required:'Username is required*',minLength: {value:8, message: 'Username should be minimun 8 characteres.' }}}
+       />
 
 
     <CustomInput
     name="email"
     placeholder="Email"
     control={control}
-    rules={{required:true, }}
+    rules={{required:true, pattern: {value: EMAIL_REGEX, message: 'please set a valid email ' }}}
     />
  
 
@@ -77,21 +81,26 @@ const SignUpScreen = () => {
     placeholder="Password"
     name="password"
     control={control}
-    secureTextEntry
-    rules={{required:true, }}
+    secureTextEntry  
+    rules={{required:'Password is required*',minLength: {value:8, message: 'Password should be minimun 8 characteres.' } }}
+   
     />
 
 <CustomInput
-    placeholder="Password"
-    name="repeatPassqord"
+    placeholder="Repeat Password"
+    name="password_repeat"
     control={control}
     secureTextEntry
-    rules={{required:true, }}
+    rules={{
+      // validate:   pwd ==  value || 'Password do not match',
+      required:'Password is required*',
+      minLength: {value:8, message: 'Password should be minimun 8 characteres.' } }}
+   
     />
 
     <CustomButton
     text='Register'
-    onPress={onRegisterPress}
+    onPress={handleSubmit(onRegisterPress)}
     type='PRIMARY'
     />
  

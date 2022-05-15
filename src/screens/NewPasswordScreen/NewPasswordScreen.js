@@ -6,9 +6,18 @@ import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import SocialSignInButtons from '../../components/SocialSignInButtons/SocialSignInButtons';
 import { useNavigation } from '@react-navigation/native';
+import { useForm, Controller} from "react-hook-form";
+
+
 
 
 const NewPasswordScreen = () => {
+
+
+  const {control, handleSubmit, 
+    formState:{errors} } = useForm();
+
+
   const [code, setCode] = useState(""); 
   const [password, setPassword] = useState("");
   const [passwordRepeat, setPasswordRepeat] = useState("");
@@ -38,25 +47,28 @@ const NewPasswordScreen = () => {
   
      <Text style={styles.title}>Reset your password</Text> 
      <Text>Insert your code received by email </Text>
-
-
-    <CustomInput
-    placeholder="Code"
-    value={code}
-    setValue={setCode}
-    />
-
  
+
   <CustomInput
-    placeholder="Enter your new password"
-    value={password}
-    setValue={setPassword}
+    name="code"
+    placeholder="Code"
+    control={control}
+    rules={{required:'Code is required*',minLength: {value:8, message: 'Password should be minimun 8 characteres.' } }}
+    />
+ 
+   <CustomInput
+    placeholder="Password"
+    name="password"
+    control={control}
+    secureTextEntry  
+    rules={{required:'Password is required*',minLength: {value:8, message: 'Password should be minimun 8 characteres.' } }}
+   
     />
 
 
     <CustomButton
     text='Submit'
-    onPress={onSubmitPress}
+    onPress={handleSubmit(onSubmitPress)}
     type='FOUR'
     />
  

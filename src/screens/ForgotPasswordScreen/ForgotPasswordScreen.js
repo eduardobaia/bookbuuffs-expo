@@ -57,12 +57,12 @@ const ForgotPasswordScreen = () => {
     name="username"
     placeholder="Username or email"
     control={control}
-    rules={{required:true, }}
+    rules={{required:'Username or email*',minLength: {value:8, message: 'Username or email should have minimiun 8 characteres.' } }}
     />
  
     <CustomButton
     text='Send'
-    onPress={onSendPress}
+    onPress={handleSubmit(onSendPress)}
     type='FOUR'
     />
  
