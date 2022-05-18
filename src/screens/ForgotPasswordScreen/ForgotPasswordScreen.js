@@ -1,4 +1,4 @@
-import { View, Text , Image, StyleSheet, useWindowDimensions, ScrollView } from 'react-native'
+import { View, Text , Image, StyleSheet, useWindowDimensions, ScrollView, Alert} from 'react-native'
 import React, {useState} from 'react'
 // import Logo from '../../../assets/images/books-book-svgrepo-com.svg'
 import Logo from '../../../assets/images/bblogo.jpeg'
@@ -9,7 +9,7 @@ import SocialSignInButtons from '../../components/SocialSignInButtons/SocialSign
 import { useNavigation } from '@react-navigation/native';
 
 import { useForm, Controller} from "react-hook-form";
-
+import { Auth } from "aws-amplify";
 
 const ForgotPasswordScreen = () => {
 
@@ -25,8 +25,19 @@ const ForgotPasswordScreen = () => {
 
   const {height} = useWindowDimensions();
 
-  const onSendPress = () => {
-    navigation.navigate('NewPassword')
+  const onSendPress = async  (data) => {
+
+    try {
+      const user = await Auth.signIn(data.username);
+      console.log("User ee" + user);
+      navigation.navigate('NewPassword')
+    } catch (e) {
+      console.log("error signing in", e.message);
+      Alert.alert("INFO", e.message);
+    }
+
+
+
   }
   
  

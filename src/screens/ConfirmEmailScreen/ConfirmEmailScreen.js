@@ -1,22 +1,25 @@
-import { View, Text , Image, StyleSheet, useWindowDimensions, ScrollView } from 'react-native'
+import { View, Text , Image, StyleSheet, useWindowDimensions, ScrollView, Alert } from 'react-native'
 import React, {useState} from 'react'
 // import Logo from '../../../assets/images/books-book-svgrepo-com.svg'
 import Logo from '../../../assets/images/bblogo.jpeg'
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import SocialSignInButtons from '../../components/SocialSignInButtons/SocialSignInButtons';
-
+import { Auth } from "aws-amplify";
 import { useForm, Controller } from "react-hook-form";
+ 
 
-
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute} from '@react-navigation/native';
 
 
 const ConfirmEmailScreen = () => {
 
-  const {control, handleSubmit, 
-    formState:{errors} } = useForm();
+  const route= useRoute();
 
+  const {control, handleSubmit, watch,
+    formState:{errors} } = useForm({defaultValues:{username:route?.params?.username}});
+
+  const username = watch('username');
 
   const [code, setCode] = useState("");
   const [email, setEmail] = useState("");
@@ -26,12 +29,33 @@ const ConfirmEmailScreen = () => {
 
   const {height} = useWindowDimensions();
 
-  const onConfirmPress = (data) => {
-    console.log(data);
-    navigation.navigate('Home')
+  const onConfirmPress = async  () => {
+    // console.log(data);
+    // navigation.navigate('Home')
+
+
+    try {
+      const response = await Auth.confirmSignUp(username);
+      console.log(response)
+      navigation.navigate('SignIn')
+      Alert.alert('Success', 'Code was resent to your email.');
+    } catch (e) {
+      Alert.alert('INFO', e.message);
+      console.log(e.message)
+    }
+
+
   }
-  const onResendPress = () => {
-       navigation.navigate('Home')
+  const onResendPress = async (data) => {
+    try {
+      const response = await Auth.resendSignUp(data.username);
+      console.log(response)
+      navigation.navigate('SignIn')
+    } catch (e) {
+      Alert.alert('INFO', e.message);
+      console.log(e.message)
+    }
+ 
   }
   const onTermsOfUsePressed = () => {
     console.log("reg in ");
@@ -60,7 +84,13 @@ const ConfirmEmailScreen = () => {
      <Text>We've sent an email with the confirmation code, please check your email to  <Text style={styles.link} onPress={ onTermsOfUsePressed}>activate your account </Text> 
  clickin in the {''} <Text style={styles.link}  onPress={ onPrivacyPolicyPressed}> confirmation link </Text> or paste the code in here.   
   </Text>
- 
+
+  <CustomInput
+    name="username"
+    placeholder="Username"
+    control={control}
+    rules={{required:'Username is required.', minLength: {value:8, message: 'Code should habve min 8 characters ' }}}
+    />
 
     <CustomInput
     name="code"

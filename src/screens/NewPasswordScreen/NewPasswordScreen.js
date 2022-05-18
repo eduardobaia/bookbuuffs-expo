@@ -1,4 +1,4 @@
-import { View, Text , Image, StyleSheet, useWindowDimensions, ScrollView } from 'react-native'
+import { View, Text , Image, StyleSheet, useWindowDimensions, ScrollView, Alert } from 'react-native'
 import React, {useState} from 'react'
 // import Logo from '../../../assets/images/books-book-svgrepo-com.svg'
 import Logo from '../../../assets/images/bblogo.jpeg'
@@ -7,7 +7,7 @@ import CustomButton from '../../components/CustomButton';
 import SocialSignInButtons from '../../components/SocialSignInButtons/SocialSignInButtons';
 import { useNavigation } from '@react-navigation/native';
 import { useForm, Controller} from "react-hook-form";
-
+import { Auth } from "aws-amplify";
 
 
 
@@ -24,7 +24,16 @@ const NewPasswordScreen = () => {
   const navigation = useNavigation();
   const {height} = useWindowDimensions();
 
-  const onSubmitPress = () => {
+  const onSubmitPress =async  (data) => {
+    
+    try {
+      const user = await Auth.forgotPasswordSubmit(data.username, data.code, data.password);
+      console.log("User ee" + user);
+    } catch (e) {
+      //console.log("error signing in", error);
+      Alert.alert("INFO", e.message);
+    }
+
     navigation.navigate('SignIn')
   }
   
@@ -47,6 +56,13 @@ const NewPasswordScreen = () => {
   
      <Text style={styles.title}>Reset your password</Text> 
      <Text>Insert your code received by email </Text>
+ 
+     <CustomInput
+    name="username"
+    placeholder="username"
+    control={control}
+    rules={{required:'Username is required*',minLength: {value:8, message: 'Password should be minimun 8 characteres.' } }}
+    />
  
 
   <CustomInput
@@ -72,17 +88,7 @@ const NewPasswordScreen = () => {
     type='FOUR'
     />
  
-  {/* <Text>By resistering, you confirm that you accept our <Text style={styles.link} onPress={ onTermsOfUsePressed}>Terms of Use </Text> 
-  and {''} <Text style={styles.link}  onPress={ onPrivacyPolicyPressed}> Privacy Policy </Text>   
-  </Text> */}
 
-{/* <SocialSignInButtons /> */}
-{/* 
-<CustomButton
-    text='Resend code'
-    onPress={onResendPress}
-    type= "SECONDARY"
-    /> */}
 <CustomButton
     text='Back to  Sing in'
     onPress={onSignInPress}

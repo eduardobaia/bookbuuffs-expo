@@ -1,4 +1,4 @@
-import { View, Text , Image, StyleSheet, useWindowDimensions, ScrollView } from 'react-native'
+import { View, Text , Image, StyleSheet, useWindowDimensions, ScrollView, Alert } from 'react-native'
 import React, {useState} from 'react'
 // import Logo from '../../../assets/images/books-book-svgrepo-com.svg'
 import Logo from '../../../assets/images/bblogo.jpeg'
@@ -8,12 +8,13 @@ import SocialSignInButtons from '../../components/SocialSignInButtons/SocialSign
 
 import { useNavigation } from '@react-navigation/native';
 import { useForm, Controller} from "react-hook-form";
+import { Auth } from "aws-amplify";
+
+
 
 const EMAIL_REGEX =/^[a-zA-Z0-9.! #$%&'*+/=? ^_`{|}~-]+@[a-zA-Z0-9-]+(?:\. [a-zA-Z0-9-]+)*$/;
 
 const SignUpScreen = () => {
-console.log('pwd eeee'+ pwd);
-
 
     const navigation = useNavigation();
   const {control, handleSubmit, 
@@ -30,11 +31,27 @@ console.log('pwd eeee'+ pwd);
 
   const {height} = useWindowDimensions();
 
-  const onSingInPress = () => {
-    console.log("Sing in ");
-  }
-  const onRegisterPress = () => {
-    navigation.navigate('ConfirmEmail')
+
+  
+  const onRegisterPress =async  (data) => {
+
+    const {username,password,email,name} = data;
+    try {
+      const response =  await Auth.signUp( {
+        username,
+         password,
+         attributes:{
+          email, name,
+          preferred_username: username
+         }
+      });
+      console.log("response sign up" + response);
+    } catch (e) {
+      Alert.alert("INFO", e.message);
+      console.log("erro"+ e.message)
+    }
+
+   navigation.navigate('ConfirmEmail', {username})
   }
   const onTermsOfUsePressed = () => {
     console.log("reg in ");
@@ -66,6 +83,13 @@ console.log('pwd eeee'+ pwd);
     placeholder="Username"
     control={control}
     rules={{required:'Username is required*',minLength: {value:8, message: 'Username should be minimun 8 characteres.' }}}
+       />
+
+    <CustomInput
+    name="name"
+    placeholder="Full name"
+    control={control}
+    rules={{required:'Full name is required*',minLength: {value:8, message: 'Username should be minimun 8 characteres.' }}}
        />
 
 
