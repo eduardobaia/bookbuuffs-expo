@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { AuthProvider } from './src/context/AuthContext';
 import ConfirmEmailScreen from './src/screens/ConfirmEmailScreen';
 import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen';
 import Navigation from './src/screens/navigation';
@@ -10,7 +11,7 @@ import SignUpScreen from './src/screens/SignUpScreen';
 
 export default function App() {
   return (
-
+    <AuthProvider>
     <SafeAreaView style={styles.root}>
     {/* <SignInScreen /> */}
     {/* <SignUpScreen /> */}
@@ -19,6 +20,7 @@ export default function App() {
     {/* <NewPasswordScreen /> */}
     <Navigation />
     </SafeAreaView>
+    </AuthProvider>
   );
 }
 

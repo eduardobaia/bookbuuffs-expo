@@ -1,5 +1,5 @@
 import { View, Text , Image, StyleSheet, useWindowDimensions, ScrollView } from 'react-native'
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
 // import Logo from '../../../assets/images/books-book-svgrepo-com.svg'
 import Logo from '../../../assets/images/bblogo.jpeg'
 import CustomInput from '../../components/CustomInput';
@@ -8,11 +8,12 @@ import SocialSignInButtons from '../../components/SocialSignInButtons/SocialSign
 
 import { useNavigation } from '@react-navigation/native';
 import { useForm, Controller} from "react-hook-form";
+import { AuthContext } from '../../context/AuthContext';
 
 const EMAIL_REGEX =/^[a-zA-Z0-9.! #$%&'*+/=? ^_`{|}~-]+@[a-zA-Z0-9-]+(?:\. [a-zA-Z0-9-]+)*$/;
 
 const SignUpScreen = () => {
-console.log('pwd eeee'+ pwd);
+  
 
 
     const navigation = useNavigation();
@@ -20,6 +21,9 @@ console.log('pwd eeee'+ pwd);
     formState:{errors}, watch } = useForm({defaultValues:{
       username:'', password:'', password_repeat:''
     }});
+
+
+    const {register, isLoading, userInfo} = useContext(AuthContext);
 
   const pwd = watch('password');
   
@@ -33,8 +37,12 @@ console.log('pwd eeee'+ pwd);
   const onSingInPress = () => {
     console.log("Sing in ");
   }
-  const onRegisterPress = () => {
-    navigation.navigate('ConfirmEmail')
+  const onRegisterPress = (data) => {
+
+    console.log("data e" +data.email,data.username,data.password)
+    register(data.email,data.username,data.password);
+
+  //  navigation.navigate('ConfirmEmail')
   }
   const onTermsOfUsePressed = () => {
     console.log("reg in ");

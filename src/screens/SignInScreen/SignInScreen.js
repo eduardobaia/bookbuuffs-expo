@@ -1,5 +1,5 @@
 import { View, Text , Image, StyleSheet, useWindowDimensions, ScrollView, TextInput } from 'react-native'
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
 // import Logo from '../../../assets/images/books-book-svgrepo-com.svg'
 // import Logo from '../../../assets/images/Bookbuffs.png'
 import Logo from '../../../assets/images/bblogo.jpeg'
@@ -8,12 +8,17 @@ import CustomButton from '../../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 
 import { useForm, Controller} from "react-hook-form";
-
+import { AuthContext } from '../../context/AuthContext';
+import Spinner from 'react-native-loading-spinner-overlay'
 
 const SignInScreen = () => {
  
   // const [username, setUsername] = useState("");
   // const [password, setPassword] = useState("");
+
+  const val = useContext(AuthContext);
+
+  const {login, isLoading} = useContext(AuthContext);
 
   const {control, handleSubmit, 
     formState:{errors} } = useForm();
@@ -24,6 +29,9 @@ const SignInScreen = () => {
 
   const onSingInPress = (data) => {
    //validate user
+console.log("entrou em sing in ", data.username)
+
+   login(data.username, data.password)
     console.log(data);
  //   navigation.navigate('Home')
   }
@@ -49,6 +57,8 @@ const SignInScreen = () => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
+
+
     <View  style={styles.root}>
       <Image
       source={Logo}
@@ -66,7 +76,7 @@ const SignInScreen = () => {
     name="username"
     placeholder="Username"
     control={control}
-    rules={{required:'Username is required*',minLength: {value:8, message: 'Username should be minimun 8 characteres.' }}}
+    rules={{required:'Username is required*',minLength: {value:3, message: 'Username should be minimun 8 characteres.' }}}
     />
 
     <CustomInput
@@ -74,7 +84,7 @@ const SignInScreen = () => {
     name="password"
     control={control}
     secureTextEntry
-    rules={{required:'Password is required*',minLength: {value:8, message: 'Password should be minimun 8 characteres.' } }}
+    rules={{required:'Password is required*',minLength: {value:3, message: 'Password should be minimun 8 characteres.' } }}
     />
 
     <CustomButton
@@ -111,6 +121,9 @@ const SignInScreen = () => {
     onPress={onSingUpPress}
     type= "TERTIARY"
     />
+
+<Spinner visible={isLoading} />
+
 
     </View>
     </ScrollView>
