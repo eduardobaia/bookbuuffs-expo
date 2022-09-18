@@ -72,17 +72,7 @@ const NewPasswordScreen = () => {
     type='FOUR'
     />
  
-  {/* <Text>By resistering, you confirm that you accept our <Text style={styles.link} onPress={ onTermsOfUsePressed}>Terms of Use </Text> 
-  and {''} <Text style={styles.link}  onPress={ onPrivacyPolicyPressed}> Privacy Policy </Text>   
-  </Text> */}
 
-{/* <SocialSignInButtons /> */}
-{/* 
-<CustomButton
-    text='Resend code'
-    onPress={onResendPress}
-    type= "SECONDARY"
-    /> */}
 <CustomButton
     text='Back to  Sing in'
     onPress={onSignInPress}
