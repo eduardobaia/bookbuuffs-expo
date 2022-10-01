@@ -11,123 +11,130 @@ import { useForm, Controller} from "react-hook-form";
 import { AuthContext } from '../../context/AuthContext';
 import Spinner from 'react-native-loading-spinner-overlay'
 
-const SignInScreen = () => {
- 
-  // const [username, setUsername] = useState("");
-  // const [password, setPassword] = useState("");
+const SignInScreen = () => { 
 
   const val = useContext(AuthContext);
 
-  const {login, isLoading} = useContext(AuthContext);
+  const { login, isLoading } = useContext(AuthContext);
 
-  const {control, handleSubmit, 
-    formState:{errors} } = useForm();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-    console.log(errors)
+  console.log(errors);
   const navigation = useNavigation();
-  const {height} = useWindowDimensions();
+  const { height } = useWindowDimensions();
 
   const onSingInPress = (data) => {
-   //validate user
-console.log("entrou em sing in ", data.username)
+    //validate user
+    console.log("entrou em sing in ", data.username);
 
-   login(data.username, data.password)
+    //login(data.username, data.password);
     console.log(data);
- //   navigation.navigate('Home')
-  }
+    // navigation.navigate('Home')
+    navigation.navigate("Home");
+  };
 
   const onForgotPasswordPress = () => {
-    navigation.navigate('ForgotPassword')
-  }
+    navigation.navigate("ForgotPassword");
+  };
   const onSingUpPress = () => {
-    navigation.navigate('SignUp')
-  }
-  
+    navigation.navigate("SignUp");
+  };
+
   const onFaceBookPress = () => {
     console.log("onForgotPasswordPress in ");
-  }
+  };
   const onGooglePress = () => {
     console.log("onForgotPasswordPress in ");
-  }
+  };
   const onApplePress = () => {
     console.log("onForgotPasswordPress in ");
-  }
-
-
+  };
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
+      <View style={styles.root}>
+        <Image
+          source={Logo}
+          resizeMode="contain"
+          style={[styles.logo, { height: height * 0.2 }]}
+        />
 
+        <Text style={{ fontSize: 40, fontWeight: "bold", color: "#00AFB9" }}>
+          BookBuffs
+        </Text>
 
-    <View  style={styles.root}>
-      <Image
-      source={Logo}
-      resizeMode="contain"
-      style={[styles.logo, {height: height * 0.2}]} />
+        {/* <TextInput placeholder='Password' /> */}
 
-  <Text style={ {fontSize: 40, fontWeight:'bold',color:'#00AFB9'}} >BookBuffs</Text>
- 
+        <CustomInput
+          name="username"
+          placeholder="Username"
+          control={control}
+          rules={{
+            required: "Username is required*",
+            minLength: {
+              value: 3,
+              message: "Username should be minimun 8 characteres.",
+            },
+          }}
+        />
 
+        <CustomInput
+          placeholder="Password"
+          name="password"
+          control={control}
+          secureTextEntry
+          rules={{
+            required: "Password is required*",
+            minLength: {
+              value: 3,
+              message: "Password should be minimun 8 characteres.",
+            },
+          }}
+        />
 
-  {/* <TextInput placeholder='Password' /> */}
- 
- 
-     <CustomInput
-    name="username"
-    placeholder="Username"
-    control={control}
-    rules={{required:'Username is required*',minLength: {value:3, message: 'Username should be minimun 8 characteres.' }}}
-    />
-
-    <CustomInput
-    placeholder="Password"
-    name="password"
-    control={control}
-    secureTextEntry
-    rules={{required:'Password is required*',minLength: {value:3, message: 'Password should be minimun 8 characteres.' } }}
-    />
-
-    <CustomButton
-    text='Login'
-    onPress={handleSubmit(onSingInPress)}
-    type='PRIMARY'
-    />
-    <CustomButton
-    text='Forgot password? '
-    onPress={onForgotPasswordPress}
-    type= "TERTIARY"
-    />
-    <CustomButton
+        <CustomButton
+          text="Login"
+          onPress={handleSubmit(onSingInPress)}
+          type="PRIMARY"
+        />
+        <CustomButton
+          text="Forgot password? "
+          onPress={onForgotPasswordPress}
+          type="TERTIARY"
+        />
+        {/* <CustomButton
     text='Sign In with Facebook'
     onPress={onFaceBookPress}
     bgColor='#E7EAF4'
     fgColor='#4765A9'
-    />
-    <CustomButton
+    /> */}
+        {/* <CustomButton
     text='Sign In with Google '
     onPress={onGooglePress}
     bgColor='#FAE9EA'
     fgColor='#DD4D44'
-    />
-    <CustomButton
+    /> */}
+        {/* <CustomButton
     text='Sign In with Apple '
     onPress={onApplePress}
     bgColor='#e3e3e3'
     fgColor='#363636'
-    />
+    /> */}
 
-<CustomButton
-    text='Dont you have an account? Create one'
-    onPress={onSingUpPress}
-    type= "TERTIARY"
-    />
+        <CustomButton
+          text="Dont you have an account? Create one"
+          onPress={onSingUpPress}
+          type="TERTIARY"
+        />
 
-<Spinner visible={isLoading} />
-
-
-    </View>
+        <Spinner visible={isLoading} />
+      </View>
     </ScrollView>
-  )
+  );
 } 
 
 const styles = StyleSheet.create({
